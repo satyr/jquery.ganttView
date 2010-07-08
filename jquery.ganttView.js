@@ -186,6 +186,7 @@ slideWidth: number
                         blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(size));
                         blockDiv.draggable({
                           axis: 'x',
+                          containment: 'parent',
                           grid: [21, 0],
                           stop: function(event, ui) {
                             var distance = ui.position.left / 21
@@ -194,8 +195,9 @@ slideWidth: number
                             console.debug('distance: %o, start: %o, end: %o', distance, s, e)
                           }
                         }).resizable({
+                          containment: 'parent',
                           grid: [21, 0],
-                          handles: 'e, w',
+                          handles: 'e',
                           stop: function(event, ui) {
                             var rdistance = Math.ceil(ui.size.width / 21)
                             var rs = blockDiv.data('block-data').start.clone().addDays(rdistance)
