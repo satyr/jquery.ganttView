@@ -188,11 +188,19 @@ slideWidth: number
                           axis: 'x',
                           grid: [21, 0],
                           stop: function(event, ui) {
+                            var distance = ui.position.left / 21
+                            var s = blockDiv.data('block-data').start.clone().addDays(distance)
+                            var e = blockDiv.data('block-data').end.clone().addDays(distance)
+                            console.debug('distance: %o, start: %o, end: %o', distance, s, e)
                           }
                         }).resizable({
                           grid: [21, 0],
                           handles: 'e, w',
                           stop: function(event, ui) {
+                            var rdistance = Math.ceil(ui.size.width / 21)
+                            var rs = blockDiv.data('block-data').start.clone().addDays(rdistance)
+                            var re = blockDiv.data('block-data').end.clone().addDays(rdistance)
+                            console.debug('width: %o, originalSize: %o, day: %o', ui.size.width, ui.originalSize.width, rdistance)
                           }
                         })
                         jQuery(rows[rowIdx]).append(blockDiv);

@@ -21,8 +21,10 @@
     $(function () {
       var ganttData = [
         {id: 1, name: "Feature 1", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,05) }]},
-        {id: 1, name: "Feature 2", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
-        {id: 1, name: "Feature 3", series: [{ name: "Actual", start: new Date(2010,00,05), end: new Date(2010,00,15) }]}
+        {id: 2, name: "Feature 2", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
+        {id: 3, name: "Feature 3", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
+        {id: 4, name: "Feature 4", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
+        {id: 5, name: "Feature 5", series: [{ name: "Actual", start: new Date(2010,00,05), end: new Date(2010,00,15) }]}
       ]
       $("#ganttChart").ganttView({
         data: ganttData,
