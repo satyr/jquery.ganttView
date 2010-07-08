@@ -23,7 +23,7 @@ slideWidth: number
         var defaults = {
             showWeekends: true,
             cellWidth: 21,
-            cellHeight: 31,
+            cellHeight: 21,
             slideWidth: 400,
             vHeaderWidth: 100,
             blockClick: null
@@ -52,7 +52,7 @@ slideWidth: number
             container.append(div);
 
             var w = jQuery("div.ganttview-vtheader", container).outerWidth() +
-				jQuery("div.ganttview-slide-container", container).outerWidth();
+              jQuery("div.ganttview-slide-container", container).outerWidth();
             container.css("width", (w + 2) + "px");
 
             Chart.applyLastClass(container);
@@ -89,7 +89,7 @@ slideWidth: number
                 var seriesDiv = jQuery("<div>", { "class": "ganttview-vtheader-series" });
                 for (var j = 0; j < data[i].series.length; j++) {
                     seriesDiv.append(jQuery("<div>", { "class": "ganttview-vtheader-series-name" })
-						.append(data[i].series[j].name));
+            .append(data[i].series[j].name));
                 }
                 itemDiv.append(seriesDiv);
                 headerDiv.append(itemDiv);
@@ -112,7 +112,7 @@ slideWidth: number
                     }).append(Chart.monthNames[i]));
                     for (var j = 0; j < months[i].length; j++) {
                         daysDiv.append(jQuery("<div>", { "class": "ganttview-hzheader-day" })
-							.append(months[i][j].getDate()));
+              .append(months[i][j].getDate()));
                     }
                 }
             }
@@ -184,6 +184,17 @@ slideWidth: number
                             blockDiv.css("background-color", data[i].series[j].color);
                         }
                         blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(size));
+                        blockDiv.draggable({
+                          axis: 'x',
+                          grid: [21, 0],
+                          stop: function(event, ui) {
+                          }
+                        }).resizable({
+                          grid: [21, 0],
+                          handles: 'e, w',
+                          stop: function(event, ui) {
+                          }
+                        })
                         jQuery(rows[rowIdx]).append(blockDiv);
                     }
                     rowIdx = rowIdx + 1;

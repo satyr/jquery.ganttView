@@ -1,37 +1,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
-
 <html lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="reset.css" />
-	<link rel="stylesheet" type="text/css" href="../jquery.ganttView.css" />
-	<style type="text/css">
-		body {
-			font-family: tahoma, verdana, helvetica;
-			font-size: 0.8em;
-			padding: 10px;
-		}
-	</style>
-	<title>jQuery Gantt</title>
+  <link rel="stylesheet" type="text/css" href="reset.css" />
+  <link rel="stylesheet" type="text/css" href="../jquery.ganttView.css" />
+  <style type="text/css">
+    body {
+      font-family: tahoma, verdana, helvetica;
+      font-size: 0.8em;
+      padding: 10px;
+    }
+  </style>
+  <title>jQuery Gantt</title>
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/flick/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="../lib/date.js"></script>
+  <script type="text/javascript" src="../jquery.ganttView.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      var ganttData = [
+        {id: 1, name: "Feature 1", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,05) }]},
+        {id: 1, name: "Feature 2", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
+        {id: 1, name: "Feature 3", series: [{ name: "Actual", start: new Date(2010,00,05), end: new Date(2010,00,15) }]}
+      ]
+      $("#ganttChart").ganttView({
+        data: ganttData,
+        start: new Date(2010,00,01),
+        end: new Date(2010,01,15),
+        slideWidth: 900
+      })
+      $(".ganttview-block").draggable({
+        axis: 'x',
+        grid: [21, 0],
+        stop: function(event, ui) {
+          console.debug(ui)
+          console.debug(ui.position.left)
+        }
+      })
+      $(".ganttview-block").resizable({
+        grid: [21, 0],
+        handles: 'e, w',
+        stop: function(event, ui) {
+          console.debug(ui)
+          console.debug(ui.size.width)
+        }
+      })
+    })
+  </script>
 </head>
 <body>
-
-	<div id="ganttChart"></div>
-
-	<script type="text/javascript" src="../lib/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../lib/date.js"></script>
-	<script type="text/javascript" src="../jquery.ganttView.js"></script>
-	<script type="text/javascript" src="data.js"></script>
-	<script type="text/javascript">
-		$(function () {
-			$("#ganttChart").ganttView({ 
-				data: ganttData,
-				start: new Date(2010,00,01),
-				end: new Date(2010,04,15),
-				slideWidth: 900
-			});
-		});
-	</script>
-
+  <div id="ganttChart"></div>
 </body>
 </html>
