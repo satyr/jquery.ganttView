@@ -16,6 +16,10 @@ cellHeight: number
 slideWidth: number
 */
 
+var ChartLang = {
+    days: "days"
+};
+
 (function (jQuery) {
     jQuery.fn.ganttView = function (options) {
 
@@ -46,14 +50,13 @@ slideWidth: number
             Chart.addHzHeader(slideDiv, months, opts.cellWidth);
             Chart.addGrid(slideDiv, opts.data, months, opts.cellWidth, opts.showWeekends);
             Chart.addBlockContainers(slideDiv, opts.data);
-            Chart.addBlocks(slideDiv, opts.data, opts.cellWidth, opts.start);
+            Chart.addBlocks(slideDiv, opts.data, opts.cellWidth, opts.start, opts.cellWidth);
 
             div.append(slideDiv);
             container.append(div);
 
             var w = jQuery("div.ganttview-vtheader", container).outerWidth() +
               jQuery("div.ganttview-slide-container", container).outerWidth();
-            container.css("width", (w + 2) + "px");
 
             Chart.applyLastClass(container);
 
@@ -64,6 +67,7 @@ slideWidth: number
     var Chart = {
 
         monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+
 
         getMonths: function (start, end) {
             start = Date.parse(start); end = Date.parse(end);
@@ -155,7 +159,7 @@ slideWidth: number
             div.append(blocksDiv);
         },
 
-        addBlocks: function (div, data, cellWidth, start) {
+        addBlocks: function (div, data, cellWidth, start, cellWidth) {
             var rows = jQuery("div.ganttview-blocks div.ganttview-block-container", div);
             var rowIdx = 0;
             for (var i = 0; i < data.length; i++) {
@@ -167,7 +171,7 @@ slideWidth: number
                         var offset = DateUtils.daysBetween(start, series.start);
                         var blockDiv = jQuery("<div>", {
                             "class": "ganttview-block",
-                            "title": series.name + ", " + size + " days",
+                            "title": series.name + ", " + size + ChartLang.days,
                             "css": {
                                 "width": ((size * cellWidth) - 9) + "px",
                                 "margin-left": ((offset * cellWidth) + 3) + "px"
@@ -191,7 +195,7 @@ slideWidth: number
                         blockDiv.draggable({
                           axis: 'x',
                           containment: 'parent',
-                          grid: [21, 0],
+                          grid: [cellWidth, 0],
                           stop: function(event, ui) {
                             var distance = ui.position.left / 21
                             var s = blockDiv.data('block-data').start.clone().addDays(distance)
@@ -200,7 +204,7 @@ slideWidth: number
                           }
                         }).resizable({
                           containment: 'parent',
-                          grid: [21, 0],
+                          grid: [cellWidth, 0],
                           handles: 'e',
                           stop: function(event, ui) {
                             var rdistance = Math.ceil(ui.size.width / 21)
