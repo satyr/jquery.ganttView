@@ -104,6 +104,7 @@ div.ganttview-grid-row-cell.ganttview-weekend {
 
 div.ganttview-blocks {
 	margin-top: 40px;
+	z-index: 5;
 }
 
 div.ganttview-block-container {
@@ -128,3 +129,5 @@ div.ganttview-block-text {
 	color: #999;
 	padding: 2px 3px;
 }
+
+._jsPlumb_connector {z-index: 3}

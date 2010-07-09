@@ -20,25 +20,33 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="../lib/date.js"></script>
+  <script type="text/javascript" src="../lib/jquery.jsPlumb-1.2-all-min.js"></script>
   <script type="text/javascript" src="../jquery.ganttView.js"></script>
   <script type="text/javascript">
     $(function () {
-      var cw = 21
+      var cw = 21;
       var ganttData = [
-        {id: 1, name: "タスク1", series: [{name: "担当者1", start: new Date(2010,00,02), end: new Date(2010,00,05)}]},
-        {id: 2, name: "タスク2", series: [{name: "担当者2", start: new Date(2010,00,05), end: new Date(2010,00,09)}]},
-        {id: 3, name: "タスク3", series: [{name: "担当者3", start: new Date(2010,00,09), end: new Date(2010,00,12)}]},
-        {id: 4, name: "タスク4", series: [{name: "担当者4", start: new Date(2010,00,02), end: new Date(2010,00,08)}]},
-        {id: 5, name: "タスク5", series: [{name: "担当者5", start: new Date(2010,00,08), end: new Date(2010,00,15)}]}
-      ]
+        {id: 1, name: "タスク1", series: [
+          {name: "担当者1", start: new Date(2010,0,2), end: new Date(2010,0,5)}]},
+        {id: 2, name: "タスク2", series: [
+          {name: "担当者2", start: new Date(2010,0,5), end: new Date(2010,0,9),
+           depends: [1, 0]}]},
+        {id: 3, name: "タスク3", series: [
+          {name: "担当者3", start: new Date(2010,0,9), end: new Date(2010,0,12),
+           depends: {id: 5, series: 1}}]},
+        {id: 4, name: "タスク4", series: [
+          {name: "担当者4", start: new Date(2010,0,2), end: new Date(2010,0,8)}]},
+        {id: 5, name: "タスク5", series: [
+          {name: "担当者5", start: new Date(2010,0,8), end: new Date(2010,0,15)},
+          {name: "担当者6", start: new Date(2010,0,9), end: new Date(2010,0,13)}]}];
       $("#ganttChart").ganttView({
         data: ganttData,
         cellWidth: cw,
-        start: new Date(2010,00,01),
-        end: new Date(2010,05,15),
+        start: new Date(2010,0,1),
+        end: new Date(2010,5,15),
         slideWidth: 500
-      })
-    })
+      });
+    });
     $("#reset").click(function(){
     });
   </script>

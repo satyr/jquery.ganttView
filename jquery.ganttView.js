@@ -34,6 +34,14 @@ var ChartLang = {
         };
         var opts = jQuery.extend(defaults, options);
         var months = Chart.getMonths(opts.start, opts.end);
+        var cnopts = jQuery.extend({
+            anchors: [jsPlumb.Anchors.LeftMiddle, jsPlumb.Anchors.RightMiddle],
+            connector: new jsPlumb.Connectors.Bezier(12),
+            paintStyle: {lineWidth: 2, strokeStyle: "red"},
+            endpoints: [new jsPlumb.Endpoints.Dot({radius: 1}),
+                        new jsPlumb.Endpoints.Dot({radius: 3})],
+            endpointStyle: {fillStyle: "red"}
+        }, options.connection);
 
         els.each(function () {
 
@@ -59,9 +67,13 @@ var ChartLang = {
               jQuery("div.ganttview-slide-container", container).outerWidth();
 
             Chart.applyLastClass(container);
+            Chart.connectBlocks(opts.data, cnopts);
 
             Events.bindBlockClick(container, opts.blockClick);
         });
+
+        $('.ganttview-slide-container').bind('scroll', jsPlumb.repaintEverything);
+        jQuery(document).bind('drag resize scroll', jsPlumb.repaintEverything);
     };
 
     var Chart = {
@@ -170,6 +182,7 @@ var ChartLang = {
                         if (size > 365) { size = 365; } // Keep blocks from overflowing a year
                         var offset = DateUtils.daysBetween(start, series.start);
                         var blockDiv = jQuery("<div>", {
+                            id: "ganttview-block-" + data[i].id + "-" + j,
                             "class": "ganttview-block",
                             "title": series.name + ", " + size + ChartLang.days,
                             "css": {
@@ -224,8 +237,20 @@ var ChartLang = {
             jQuery("div.ganttview-grid-row div.ganttview-grid-row-cell:last-child", div).addClass("last");
             jQuery("div.ganttview-hzheader-days div.ganttview-hzheader-day:last-child", div).addClass("last");
             jQuery("div.ganttview-hzheader-months div.ganttview-hzheader-month:last-child", div).addClass("last");
-        }
+        },
 
+        connectBlocks: function (data, options) {
+            for (var i = data.length; i--;) {
+                for (var dt = data[i], ds = dt.series, j = ds.length; j--;) {
+                    var dp = ds[j].depends;
+                    if (!dp) continue;
+                    jsPlumb.connect($.extend({
+                      source: "ganttview-block-" + dt.id + "-" + j,
+                      target: "ganttview-block-" + (dp.id || dp[0]) + "-" + (dp.series || dp[1]),
+                    }, options));
+                }
+            }
+        }
     };
 
     var Events = {
