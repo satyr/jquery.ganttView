@@ -37,8 +37,8 @@
         start: new Date(2010,00,01),
         end: new Date(2010,05,15),
         slideWidth: 500,
-        change: function(o,m) {
-            console.log(m);
+        change: function(o,s,m) {
+            console.log(o.data('block-data').id);
         }
       })
     })
