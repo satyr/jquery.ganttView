@@ -50,7 +50,7 @@ var ChartLang = {
             Chart.addHzHeader(slideDiv, months, opts.cellWidth);
             Chart.addGrid(slideDiv, opts.data, months, opts.cellWidth, opts.showWeekends);
             Chart.addBlockContainers(slideDiv, opts.data);
-            Chart.addBlocks(slideDiv, opts.data, opts.cellWidth, opts.start, opts.cellWidth);
+            Chart.addBlocks(slideDiv, opts.data, opts.cellWidth, opts.start);
 
             div.append(slideDiv);
             container.append(div);
@@ -159,7 +159,7 @@ var ChartLang = {
             div.append(blocksDiv);
         },
 
-        addBlocks: function (div, data, cellWidth, start, cellWidth) {
+        addBlocks: function (div, data, cellWidth, start) {
             var rows = jQuery("div.ganttview-blocks div.ganttview-block-container", div);
             var rowIdx = 0;
             for (var i = 0; i < data.length; i++) {
