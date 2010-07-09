@@ -36,7 +36,10 @@
         cellWidth: cw,
         start: new Date(2010,00,01),
         end: new Date(2010,01,15),
-        slideWidth: 900
+        slideWidth: 900,
+        change: function(o, v) {
+        console.log(o.data("block-data").id+":"+v);
+        }
       })
     })
     $("#reset").click(function(){
