@@ -36,7 +36,10 @@
         cellWidth: cw,
         start: new Date(2010,00,01),
         end: new Date(2010,05,15),
-        slideWidth: 500
+        slideWidth: 500,
+        change: function(o,m) {
+            console.log(m);
+        }
       })
     })
     $("#reset").click(function(){
