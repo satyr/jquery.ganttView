@@ -203,7 +203,7 @@ var ChartLang = {
                             var e = blockDiv.data('block-data').end.clone().addDays(distance)
                             console.debug('distance: %o, start: %o, end: %o', distance, s, e)
 
-                            if(change !== undefined) {
+                            if(change !== null) {
                                 m = $(this).css("margin-left").replace(/px/, "");
                                 n = parseInt(m)+parseInt(ui.position.left);
                                 $(this).css("margin-left", n+"px");
@@ -226,7 +226,7 @@ var ChartLang = {
                             var rs = blockDiv.data('block-data').start.clone().addDays(rdistance)
                             var re = blockDiv.data('block-data').end.clone().addDays(rdistance)
                             console.debug('width: %o, originalSize: %o, day: %o', ui.size.width, ui.originalSize.width, rdistance)
-                            if(change !== undefined) change(blockDiv, rdistance);
+                            if(change !== null) change(blockDiv, rdistance);
                           }
                         })
                         jQuery(rows[rowIdx]).append(blockDiv);
