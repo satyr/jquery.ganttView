@@ -2,7 +2,7 @@
    "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="ja">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" type="text/css" href="reset.css" />
   <link rel="stylesheet" type="text/css" href="../jquery.ganttView.css" />
   <style type="text/css">
@@ -12,7 +12,7 @@
       padding: 10px;
     }
     div.ganttview-block {
-	  cursor: move;
+      cursor: move;
     }
   </style>
   <title>jQuery Gantt</title>
@@ -23,24 +23,23 @@
   <script type="text/javascript" src="../jquery.ganttView.js"></script>
   <script type="text/javascript">
     $(function () {
-	  var cw = 21;
+      var cw = 21
       var ganttData = [
-        {id: 1, name: "タスク1", series: [{ name: "担当者1", start: new Date(2010,00,02), end: new Date(2010,00,05), text: "aaa" }]},
-        {id: 2, name: "タスク2", series: [{ name: "担当者2", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "bbb" }]},
-        {id: 3, name: "タスク3", series: [{ name: "担当者3", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "ccc" }]},
-        {id: 4, name: "タスク4", series: [{ name: "担当者4", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "ddd" }]},
-        {id: 5, name: "タスク5", series: [{ name: "担当者5", start: new Date(2010,00,05), end: new Date(2010,00,15), text: "eee" }]}
+        {id: 1, name: "タスク1", series: [{name: "担当者1", start: new Date(2010,00,02), end: new Date(2010,00,05)}]},
+        {id: 2, name: "タスク2", series: [{name: "担当者2", start: new Date(2010,00,05), end: new Date(2010,00,09)}]},
+        {id: 3, name: "タスク3", series: [{name: "担当者3", start: new Date(2010,00,09), end: new Date(2010,00,12)}]},
+        {id: 4, name: "タスク4", series: [{name: "担当者4", start: new Date(2010,00,02), end: new Date(2010,00,08)}]},
+        {id: 5, name: "タスク5", series: [{name: "担当者5", start: new Date(2010,00,08), end: new Date(2010,00,15)}]}
       ]
       $("#ganttChart").ganttView({
         data: ganttData,
         cellWidth: cw,
         start: new Date(2010,00,01),
-        end: new Date(2010,01,15),
-        slideWidth: 900
+        end: new Date(2010,05,15),
+        slideWidth: 500
       })
     })
     $("#reset").click(function(){
-
     });
   </script>
 </head>
