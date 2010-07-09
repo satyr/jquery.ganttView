@@ -72,8 +72,8 @@ var ChartLang = {
             Events.bindBlockClick(container, opts.blockClick);
         });
 
-        $('.ganttview-slide-container').bind('scroll', jsPlumb.repaintEverything);
-        jQuery(document).bind('drag resize scroll', jsPlumb.repaintEverything);
+        jQuery(".ganttview-slide-container").bind("scroll", jsPlumb.repaintEverything);
+        jQuery(document).bind("drag resize", jsPlumb.repaintEverything);
     };
 
     var Chart = {
@@ -245,7 +245,7 @@ var ChartLang = {
                     if (!("depends" in ds[j])) continue;
                     for (var dps = [].concat(ds[j].depends), k = dps.length; k--;) {
                         var dp = dps[k];
-                        jsPlumb.connect($.extend({
+                        jsPlumb.connect(jQuery.extend({
                           source: "ganttview-block-" + dt.id + "-" + j,
                           target: "ganttview-block-" + dp.id + "-" + (dp.series || 0),
                         }, options));
