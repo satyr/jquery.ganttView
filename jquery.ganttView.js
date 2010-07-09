@@ -183,7 +183,11 @@ slideWidth: number
                         if (data[i].series[j].color) {
                             blockDiv.css("background-color", data[i].series[j].color);
                         }
-                        blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(size));
+                        if(data[i].series[j].text) {
+                            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(data[i].series[j].text));
+                        }else{
+                            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(size));
+                        }
                         blockDiv.draggable({
                           axis: 'x',
                           containment: 'parent',

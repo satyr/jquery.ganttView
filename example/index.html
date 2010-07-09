@@ -10,6 +10,9 @@
       font-size: 0.8em;
       padding: 10px;
     }
+    div.ganttview-block {
+	  cursor: move;
+    }
   </style>
   <title>jQuery Gantt</title>
   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/flick/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" />
@@ -19,39 +22,48 @@
   <script type="text/javascript" src="../jquery.ganttView.js"></script>
   <script type="text/javascript">
     $(function () {
+	    var cw = 21;
       var ganttData = [
-        {id: 1, name: "Feature 1", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,05) }]},
-        {id: 2, name: "Feature 2", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
-        {id: 3, name: "Feature 3", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
-        {id: 4, name: "Feature 4", series: [{ name: "Actual", start: new Date(2010,00,02), end: new Date(2010,00,08) }]},
-        {id: 5, name: "Feature 5", series: [{ name: "Actual", start: new Date(2010,00,05), end: new Date(2010,00,15) }]}
+        {id: 1, name: "タスク1", series: [{ name: "担当者1", start: new Date(2010,00,02), end: new Date(2010,00,05), text: "aaa" }]},
+        {id: 2, name: "タスク2", series: [{ name: "担当者2", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "bbb" }]},
+        {id: 3, name: "タスク3", series: [{ name: "担当者3", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "ccc" }]},
+        {id: 4, name: "タスク4", series: [{ name: "担当者4", start: new Date(2010,00,02), end: new Date(2010,00,08), text: "ddd" }]},
+        {id: 5, name: "タスク5", series: [{ name: "担当者5", start: new Date(2010,00,05), end: new Date(2010,00,15), text: "eee" }]}
       ]
       $("#ganttChart").ganttView({
         data: ganttData,
+        cellWidth: cw,
         start: new Date(2010,00,01),
         end: new Date(2010,01,15),
-        slideWidth: 900
-      })
-      $(".ganttview-block").draggable({
-        axis: 'x',
-        grid: [21, 0],
-        stop: function(event, ui) {
-          console.debug(ui)
-          console.debug(ui.position.left)
-        }
-      })
-      $(".ganttview-block").resizable({
-        grid: [21, 0],
-        handles: 'e, w',
-        stop: function(event, ui) {
-          console.debug(ui)
-          console.debug(ui.size.width)
+        slideWidth: 900,
+        blockClick: function() {
+	      $(this).draggable({
+	        axis: 'x',
+	        grid: [cw, 0],
+	        stop: function(event, ui) {
+	          console.debug(ui)
+	          console.debug(ui.position.left)
+	        }
+	      }).resizable({
+	        grid: [cw, 0],
+	        handles: 'e, w',
+	        stop: function(event, ui) {
+	          console.debug(ui)
+	          console.debug(ui.size.width)
+	        }
+	      })
         }
       })
     })
+    $("#reset").click(function(){
+    	
+    });
   </script>
 </head>
 <body>
   <div id="ganttChart"></div>
+  <div id="reset"></div>
 </body>
 </html>
+
+
