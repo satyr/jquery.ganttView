@@ -242,12 +242,14 @@ var ChartLang = {
         connectBlocks: function (data, options) {
             for (var i = data.length; i--;) {
                 for (var dt = data[i], ds = dt.series, j = ds.length; j--;) {
-                    var dp = ds[j].depends;
-                    if (!dp) continue;
-                    jsPlumb.connect($.extend({
-                      source: "ganttview-block-" + dt.id + "-" + j,
-                      target: "ganttview-block-" + (dp.id || dp[0]) + "-" + (dp.series || dp[1]),
-                    }, options));
+                    if (!("depends" in ds[j])) continue;
+                    for (var dps = [].concat(ds[j].depends), k = dps.length; k--;) {
+                        var dp = dps[k];
+                        jsPlumb.connect($.extend({
+                          source: "ganttview-block-" + dt.id + "-" + j,
+                          target: "ganttview-block-" + dp.id + "-" + (dp.series || 0),
+                        }, options));
+                    }
                 }
             }
         }
