@@ -25,11 +25,11 @@
     $(function () {
       var cw = 21
       var ganttData = [
-        {id: 1, name: "タスク1", series: [{name: "担当者1", start: new Date(2010,00,02), end: new Date(2010,00,05)}]},
-        {id: 2, name: "タスク2", series: [{name: "担当者2", start: new Date(2010,00,05), end: new Date(2010,00,09)}]},
-        {id: 3, name: "タスク3", series: [{name: "担当者3", start: new Date(2010,00,09), end: new Date(2010,00,12)}]},
-        {id: 4, name: "タスク4", series: [{name: "担当者4", start: new Date(2010,00,02), end: new Date(2010,00,08)}]},
-        {id: 5, name: "タスク5", series: [{name: "担当者5", start: new Date(2010,00,08), end: new Date(2010,00,15)}]}
+        {id: 1, name: "タスク1", start: new Date(2010,00,02), end: new Date(2010,00,05)},
+        {id: 2, name: "タスク2", start: new Date(2010,00,05), end: new Date(2010,00,09)},
+        {id: 3, name: "タスク3", start: new Date(2010,00,09), end: new Date(2010,00,12)},
+        {id: 4, name: "タスク4", start: new Date(2010,00,02), end: new Date(2010,00,08)},
+        {id: 5, name: "タスク5", start: new Date(2010,00,08), end: new Date(2010,00,15)}
       ]
       $("#ganttChart").ganttView({
         data: ganttData,
@@ -43,7 +43,7 @@
       })
     })
     $("#reset").click(function(){
-    });
+    })
   </script>
 </head>
 <body>
