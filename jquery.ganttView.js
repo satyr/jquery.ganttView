@@ -20,6 +20,20 @@ var ChartLang = {
     days: "days"
 };
 
+// points: array of [x, y] (float) representing relative break points
+function BrokenLineConnector(points){ this.points = points || [] }
+BrokenLineConnector.prototype = new jsPlumb.Connectors.Straight;
+BrokenLineConnector.prototype.paint = function(dims, ctx){
+  var sx = dims[4], sy = dims[5], tx = dims[6], ty = dims[7];
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  for(var ps = this.points, i = -1, p; p = ps[++i];)
+    ctx.lineTo(sx + p[0] * (tx - sx),
+               sy + p[1] * (ty - sy));
+  ctx.lineTo(tx, ty);
+  ctx.stroke();
+};
+
 (function (jQuery) {
     jQuery.fn.ganttView = function (options) {
 
@@ -36,10 +50,10 @@ var ChartLang = {
         var months = Chart.getMonths(opts.start, opts.end);
         var cnopts = jQuery.extend({
             anchors: [jsPlumb.Anchors.LeftMiddle, jsPlumb.Anchors.RightMiddle],
-            connector: new jsPlumb.Connectors.Bezier(12),
-            paintStyle: {lineWidth: 2, strokeStyle: "red"},
-            endpoints: [new jsPlumb.Endpoints.Dot({radius: 1}),
-                        new jsPlumb.Endpoints.Dot({radius: 3})],
+            connector: new BrokenLineConnector([[.5, 0], [.5, 1]]),
+            paintStyle: {lineWidth: 1, strokeStyle: "red"},
+            endpoints: [{paint: function(){}},
+                        new jsPlumb.Endpoints.Triangle({width: 8, height: 6})],
             endpointStyle: {fillStyle: "red"}
         }, options.connection);
 

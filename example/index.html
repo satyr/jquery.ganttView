@@ -32,14 +32,12 @@
           {name: "担当者2", start: new Date(2010,0,5), end: new Date(2010,0,9),
            depends: {id: 1}}]},
         {id: 3, name: "タスク3", series: [
-          {name: "担当者3", start: new Date(2010,0,9), end: new Date(2010,0,12),
-           depends: {id: 5, series: 1}}]},
+          {name: "担当者3", start: new Date(2010,0,9), end: new Date(2010,0,12)}]},
         {id: 4, name: "タスク4", series: [
           {name: "担当者4", start: new Date(2010,0,2), end: new Date(2010,0,8)}]},
         {id: 5, name: "タスク5", series: [
-          {name: "担当者5", start: new Date(2010,0,9), end: new Date(2010,0,16),
-           depends: [{id: 2}, {id: 4}]},
-          {name: "担当者6", start: new Date(2010,0,9), end: new Date(2010,0,13)}]}];
+          {name: "担当者5", start: new Date(2010,0,10), end: new Date(2010,0,17),
+           depends: [{id: 2}, {id: 4}]}]}];
       $("#ganttChart").ganttView({
         data: ganttData,
         cellWidth: cw,
