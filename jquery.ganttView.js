@@ -237,10 +237,23 @@ var ChartLang = {
         handles: 'e',
         stop: function(event, ui) {
           $(o).css("left", "").css("top", "").css("position", "")
-          var rdistance = Math.ceil(ui.size.width / cellWidth)
-          var rs = $(o).data('block-data').start.clone().addDays(rdistance)
-          var re = $(o).data('block-data').end.clone().addDays(rdistance)
+          rdistance = Math.ceil(ui.size.width / cellWidth)
+          rs = $(o).data('block-data').start.clone().addDays(rdistance)
+          re = $(o).data('block-data').end.clone().addDays(rdistance)
           console.debug('width: %o, originalSize: %o, day: %o', ui.size.width, ui.originalSize.width, rdistance)
+
+          adds = ui.size.width-ui.originalSize.width;
+          if(adds>0) {
+            odd = parseInt(adds/cellWidth)+1;
+          }else{
+            odd = parseInt(adds/cellWidth)-1;
+          }
+          newsize = $(o).data('block-data').size+odd;
+          re = DateUtils.resize($(o).data('block-data').start.clone(), newsize, cellWidth);
+          console.debug("cnt: %o, s %o, w: %o", newsize, re["start"], re["width"]);
+          $(o).data('block-data').size = newsize;
+          $(o).css("width", re["width"]);
+
           change($(o), rs, rdistance)
         }
       });

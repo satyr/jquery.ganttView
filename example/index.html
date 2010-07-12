@@ -14,7 +14,7 @@
   </style>
   <title>jQuery Gantt</title>
   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/flick/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" />
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js" type="text/javascript"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="../lib/date.js"></script>
   <script type="text/javascript" src="../jquery.ganttView.js"></script>
@@ -41,7 +41,7 @@
         $('<p>Edit task.</p>').dialog({modal: true})
         },
         change: function(o,s,m) {
-            console.log(o.data('block-data').id);
+//            console.log(o.data('block-data').id);
         }
       })
     })
