@@ -14,9 +14,16 @@ end: date
 cellWidth: number
 cellHeight: number
 slideWidth: number
-*/
 
-var ChartLang = {days: "days"};
+var ChartLang = {
+    days: "days",
+              monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+};
+*/
+var ChartLang = {
+    days: "人日",
+    monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+};
 
 (function (jQuery) {
   jQuery.fn.ganttView = function (options) {
@@ -64,7 +71,6 @@ var ChartLang = {days: "days"};
   }
 
   var Chart = {
-    monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 
     getMonths: function (start, end) {
       start = Date.parse(start); end = Date.parse(end)
@@ -107,7 +113,7 @@ var ChartLang = {days: "days"};
           monthsDiv.append(jQuery("<div>", {
             "class": "ganttview-hzheader-month",
             "css": { "width": (w - 1) + "px" }
-          }).append(Chart.monthNames[i]))
+          }).append(ChartLang.monthNames[i]))
           for (var j = 0; j < months[i].length; j++) {
             daysDiv.append(jQuery("<div>", { "class": "ganttview-hzheader-day" })
             .append(months[i][j].getDate()))
@@ -154,16 +160,18 @@ var ChartLang = {days: "days"};
       var rowIdx = 0
       for (var i = 0; i < data.length; i++) {
         var series = data[i]
-        a = ""
-        var size = DateUtils.daysBetween(series.start, series.end)
-        if (size && size > 0) {
-          if (size > 365) { size = 365; } // Keep blocks from overflowing a year
+        if(!series.size) {
+          series.size = DateUtils.daysBetween(series.start, series.end)
+        }
+        if (series.size && series.size > 0) {
+          if (series.size > 365) { series.size = 365; } // Keep blocks from overflowing a year
           var offset = DateUtils.daysBetween(start, series.start)
+          var width = DateUtils.getWidth(series.start, series.size, cellWidth)
           var blockDiv = jQuery("<div>", {
             "class": "ganttview-block",
-            "title": series.name + ", " + size + ChartLang.days,
+            "title": series.name + ", " + series.size + ChartLang.days,
             "css": {
-              "width": ((size * cellWidth) - 9) + "px",
+              "width": width,
               "margin-left": ((offset * cellWidth) + 3) + "px"
             }
           }).data("block-data", {
@@ -172,46 +180,18 @@ var ChartLang = {days: "days"};
             seriesName: series.name,
             start: Date.parse(series.start),
             end: Date.parse(series.end),
+            size: series.size,
             color: series.color
-          }).draggable({
-            axis: 'x',
-            containment: 'parent',
-            grid: [cellWidth, 0],
-            stop: function(event, ui) {
-              var distance = ui.position.left / cellWidth
-              var s = $(this).data('block-data').start.clone().addDays(distance)
-              var e = $(this).data('block-data').end.clone().addDays(distance)
-              console.debug('distance: %o, start: %o, end: %o', distance, s, e)
+          });
+          if(change) this.addEvent($(blockDiv), cellWidth, change);
 
-              if (change !== null) {
-                m = $(this).css("margin-left").replace(/px/, "")
-                n = parseInt(m)+parseInt(ui.position.left)
-                $(this).css("margin-left", n+"px")
-                $(this).css("left", "0px")
-                ui.position.left=0
-
-                change($(this), s, distance)
-              }
-            }
-          }).resizable({
-            containment: 'parent',
-            grid: [cellWidth, 0],
-            handles: 'e',
-            stop: function(event, ui) {
-              var rdistance = Math.ceil(ui.size.width / cellWidth)
-              var rs = $(this).data('block-data').start.clone().addDays(rdistance)
-              var re = $(this).data('block-data').end.clone().addDays(rdistance)
-              console.debug('width: %o, originalSize: %o, day: %o', ui.size.width, ui.originalSize.width, rdistance)
-              if(change !== null) change($(this), rs, rdistance)
-            }
-          })
           if (series.color) {
             blockDiv.css("background-color", series.color)
           }
           if(series.text) {
             blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(series.text))
           }else{
-            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(size))
+            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(series.size))
           }
           jQuery(rows[rowIdx]).append(blockDiv)
         }
@@ -223,8 +203,38 @@ var ChartLang = {days: "days"};
       jQuery("div.ganttview-grid-row div.ganttview-grid-row-cell:last-child", div).addClass("last")
       jQuery("div.ganttview-hzheader-days div.ganttview-hzheader-day:last-child", div).addClass("last")
       jQuery("div.ganttview-hzheader-months div.ganttview-hzheader-month:last-child", div).addClass("last")
-    }
+    },
 
+    addEvent: function(o, cellWidth, change) {
+      o.draggable({
+        axis: 'x',
+        containment: 'parent',
+        grid: [cellWidth, 0],
+        stop: function(event, ui) {
+          var distance = ui.position.left / cellWidth
+          var s = $(o).data('block-data').start.clone().addDays(distance)
+          var e = $(o).data('block-data').end.clone().addDays(distance)
+          console.debug('distance: %o, start: %o, end: %o', distance, s, e)
+          m = $(o).css("margin-left").replace(/px/, "")
+          n = parseInt(m)+parseInt(ui.position.left)
+          $(o).css("margin-left", n+"px")
+          $(o).css("left", "0px")
+          ui.position.left=0
+          change($(o), s, distance)
+        }
+      }).resizable({
+        containment: 'parent',
+        grid: [cellWidth, 0],
+        handles: 'e',
+        stop: function(event, ui) {
+          var rdistance = Math.ceil(ui.size.width / cellWidth)
+          var rs = $(o).data('block-data').start.clone().addDays(rdistance)
+          var re = $(o).data('block-data').end.clone().addDays(rdistance)
+          console.debug('width: %o, originalSize: %o, day: %o', ui.size.width, ui.originalSize.width, rdistance)
+          change($(o), rs, rdistance)
+        }
+      });
+    }
   }
 
   var Events = {
@@ -257,6 +267,17 @@ var ChartLang = {days: "days"};
       var count = 0, date = start.clone()
       while (date.compareTo(end) == -1) { count = count + 1; date.addDays(1); }
       return count
+    },
+    getWidth: function (start, size, width) {
+      cnt = size;
+      s = start.clone();
+      for(var i=0; i<cnt; i++) {
+        if(this.isWeekend(s)) {
+          cnt++;
+        }
+        s.addDays(1);
+      }
+      return ((cnt * width) - 9) + "px"
     },
     isWeekend: function (date) {
       return date.getDay() % 6 == 0
