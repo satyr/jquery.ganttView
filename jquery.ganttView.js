@@ -160,16 +160,16 @@ var ChartLang = {
       var rowIdx = 0
       for (var i = 0; i < data.length; i++) {
         var series = data[i]
-        if(!series.size) {
-          series.size = DateUtils.daysBetween(series.start, series.end)
+        if(!series.days) {
+          series.days = DateUtils.daysBetween(series.start, series.end)
         }
-        if (series.size && series.size > 0) {
-          if (series.size > 365) { series.size = 365; } // Keep blocks from overflowing a year
+        if (series.days && series.days > 0) {
+          if (series.days > 365) { series.days = 365; } // Keep blocks from overflowing a year
           var offset = DateUtils.daysBetween(start, series.start)
-          var width = DateUtils.getWidth(series.start, series.size, cellWidth)
+          var width = DateUtils.getWidth(series.start, series.days, cellWidth)
           var blockDiv = jQuery("<div>", {
             "class": "ganttview-block",
-            "title": series.name + ", " + series.size + ChartLang.days,
+            "title": series.name + ", " + series.days + ChartLang.days,
             "css": {
               "width": width,
               "margin-left": ((offset * cellWidth) + 3) + "px"
@@ -180,7 +180,7 @@ var ChartLang = {
             seriesName: series.name,
             start: Date.parse(series.start),
             end: Date.parse(series.end),
-            size: series.size,
+            days: series.days,
             color: series.color
           });
           if(change) this.addEvent($(blockDiv), cellWidth, change);
@@ -191,7 +191,7 @@ var ChartLang = {
           if(series.text) {
             blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(series.text))
           }else{
-            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(series.size))
+            blockDiv.append($("<div>", { "class": "ganttview-block-text" }).text(series.days))
           }
           jQuery(rows[rowIdx]).append(blockDiv)
         }
@@ -216,8 +216,8 @@ var ChartLang = {
           e = $(o).data('block-data').end.clone().addDays(distance)
           console.debug('distance: %o, start: %o, end: %o', distance, s, e)
 
-          size = $(o).data('block-data').size
-          re = DateUtils.resize(s, size, cellWidth);
+          days = $(o).data('block-data').days
+          re = DateUtils.resize(s, days, cellWidth);
           var between =0;
           if(s.toString() != re["start"].toString()) {
             $(o).data('block-data').start = re["start"];
@@ -244,14 +244,14 @@ var ChartLang = {
 
           adds = ui.size.width-ui.originalSize.width;
           if(adds>0) {
-            odd = parseInt(adds/cellWidth)+1;
+            dif = parseInt(adds/cellWidth)+1;
           }else{
-            odd = parseInt(adds/cellWidth)-1;
+            dif = parseInt(adds/cellWidth)-1;
           }
-          newsize = $(o).data('block-data').size+odd;
-          re = DateUtils.resize($(o).data('block-data').start.clone(), newsize, cellWidth);
-          console.debug("cnt: %o, s %o, w: %o", newsize, re["start"], re["width"]);
-          $(o).data('block-data').size = newsize;
+          newDays = $(o).data('block-data').days+dif;
+          re = DateUtils.resize($(o).data('block-data').start.clone(), newDays, cellWidth);
+          console.debug("cnt: %o, s %o, w: %o", newDays, re["start"], re["width"]);
+          $(o).data('block-data').days = newDays;
           $(o).css("width", re["width"]);
 
           change($(o), rs, rdistance)
@@ -291,8 +291,8 @@ var ChartLang = {
       while (date.compareTo(end) == -1) { count = count + 1; date.addDays(1); }
       return count
     },
-    getWidth: function (start, size, width) {
-      cnt = size;
+    getWidth: function (start, days, width) {
+      cnt = days;
       s2 = start.clone();
       for(var i=0; i<cnt; i++) {
         if(this.isWeekend(s2)) {
@@ -305,7 +305,7 @@ var ChartLang = {
     isWeekend: function (date) {
       return date.getDay() % 6 == 0
     },
-    resize: function(start, size, cellWidth) {
+    resize: function(start, days, cellWidth) {
       flg = true;
       s1 = start.clone();
       while(flg) {
@@ -315,7 +315,7 @@ var ChartLang = {
           flg = false;
         }
       }
-      width = this.getWidth(s1, size, cellWidth);
+      width = this.getWidth(s1, days, cellWidth);
       return {"start":s1, "width":width}
     }
   }

@@ -22,11 +22,11 @@
     $(function () {
       var cw = 21
       var ganttData = [
-        {id: 1, name: "タスク1", start: new Date(2010,00,01), end: new Date(2010,00,06), size: 3},
-        {id: 2, name: "タスク2", start: new Date(2010,00,05), end: new Date(2010,00,09), size: 4},
-        {id: 3, name: "タスク3", start: new Date(2010,00,08), end: new Date(2010,00,12), size: 2},
-        {id: 4, name: "タスク4", start: new Date(2010,00,04), end: new Date(2010,00,09), size: 5},
-        {id: 5, name: "タスク5", start: new Date(2010,00,08), end: new Date(2010,00,15), size: 5}
+        {id: 1, name: "タスク1", start: new Date(2010,00,01), end: new Date(2010,00,06), days: 3},
+        {id: 2, name: "タスク2", start: new Date(2010,00,05), end: new Date(2010,00,09), days: 4},
+        {id: 3, name: "タスク3", start: new Date(2010,00,08), end: new Date(2010,00,12), days: 2},
+        {id: 4, name: "タスク4", start: new Date(2010,00,04), end: new Date(2010,00,09), days: 5},
+        {id: 5, name: "タスク5", start: new Date(2010,00,08), end: new Date(2010,00,15), days: 5}
       ]
       $("#ganttChart").ganttView({
         data: ganttData,
