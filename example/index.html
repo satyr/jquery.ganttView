@@ -38,7 +38,8 @@
           console.log("click");
         },
         itemClick: function(data) {
-        $('<p>Edit task.</p>').dialog({modal: true})
+            console.log(data.id);
+//        $('<p>Edit task.</p>').dialog({modal: true})
         },
         change: function(o,s,m) {
 //            console.log(o.data('block-data').id);
