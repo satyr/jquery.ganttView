@@ -211,14 +211,23 @@ var ChartLang = {
         containment: 'parent',
         grid: [cellWidth, 0],
         stop: function(event, ui) {
-          var distance = ui.position.left / cellWidth
-          var s = $(o).data('block-data').start.clone().addDays(distance)
-          var e = $(o).data('block-data').end.clone().addDays(distance)
+          distance = ui.position.left / cellWidth
+          s = $(o).data('block-data').start.clone().addDays(distance)
+          e = $(o).data('block-data').end.clone().addDays(distance)
           console.debug('distance: %o, start: %o, end: %o', distance, s, e)
+
+          size = $(o).data('block-data').size
+          re = DateUtils.resize(s, size, cellWidth);
+          var between =0;
+          if(s.toString() != re["start"].toString()) {
+            $(o).data('block-data').start = re["start"];
+            between = DateUtils.daysBetween(s, re["start"]);
+          }
+
           m = $(o).css("margin-left").replace(/px/, "")
-          n = parseInt(m)+parseInt(ui.position.left)
-          $(o).css("margin-left", n+"px")
-          $(o).css("left", "0px")
+          n = parseInt(m)+parseInt(ui.position.left)+(parseInt(between)*cellWidth);
+          console.log(re["width"]);
+          $(o).css("margin-left", n+"px").css("left", "0px").css("width", re["width"]);
           ui.position.left=0
           change($(o), s, distance)
         }
@@ -227,6 +236,7 @@ var ChartLang = {
         grid: [cellWidth, 0],
         handles: 'e',
         stop: function(event, ui) {
+          $(o).css("left", "").css("top", "").css("position", "")
           var rdistance = Math.ceil(ui.size.width / cellWidth)
           var rs = $(o).data('block-data').start.clone().addDays(rdistance)
           var re = $(o).data('block-data').end.clone().addDays(rdistance)
@@ -270,17 +280,30 @@ var ChartLang = {
     },
     getWidth: function (start, size, width) {
       cnt = size;
-      s = start.clone();
+      s2 = start.clone();
       for(var i=0; i<cnt; i++) {
-        if(this.isWeekend(s)) {
+        if(this.isWeekend(s2)) {
           cnt++;
         }
-        s.addDays(1);
+        s2.addDays(1);
       }
       return ((cnt * width) - 9) + "px"
     },
     isWeekend: function (date) {
       return date.getDay() % 6 == 0
+    },
+    resize: function(start, size, cellWidth) {
+      flg = true;
+      s1 = start.clone();
+      while(flg) {
+        if(this.isWeekend(s1)) {
+          s1.addDays(1);
+        }else{
+          flg = false;
+        }
+      }
+      width = this.getWidth(s1, size, cellWidth);
+      return {"start":s1, "width":width}
     }
   }
 })(jQuery)
