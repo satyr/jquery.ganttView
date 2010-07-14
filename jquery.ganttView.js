@@ -25,6 +25,20 @@ var ChartLang = {
     monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
 };
 
+// points: array of [x, y] (float) representing relative break points
+function BrokenLineConnector(points){ this.points = points || [] }
+BrokenLineConnector.prototype = new jsPlumb.Connectors.Straight;
+BrokenLineConnector.prototype.paint = function(dims, ctx){
+  var sx = dims[4], sy = dims[5], tx = dims[6], ty = dims[7];
+  ctx.beginPath();
+  ctx.moveTo(sx, sy);
+  for(var ps = this.points, i = -1, p; p = ps[++i];)
+    ctx.lineTo(sx + p[0] * (tx - sx),
+               sy + p[1] * (ty - sy));
+  ctx.lineTo(tx, ty);
+  ctx.stroke();
+};
+
 (function (jQuery) {
   jQuery.fn.ganttView = function (options) {
     var els = this
@@ -40,6 +54,14 @@ var ChartLang = {
     }
     var opts = jQuery.extend(defaults, options)
     var months = Chart.getMonths(opts.start, opts.end)
+    var cnopts = jQuery.extend({
+       anchors: [jsPlumb.Anchors.LeftMiddle, jsPlumb.Anchors.RightMiddle],
+       connector: new BrokenLineConnector([[.5, 0], [.5, 1]]),
+       paintStyle: {lineWidth: 1, strokeStyle: "red"},
+       endpoints: [{paint: function(){}},
+                   new jsPlumb.Endpoints.Triangle({width: 8, height: 6})],
+       endpointStyle: {fillStyle: "red"}
+    }, options.connection);
 
     els.each(function () {
       var container = jQuery(this)
@@ -64,10 +86,14 @@ var ChartLang = {
         jQuery("div.ganttview-slide-container", container).outerWidth()
 
       Chart.applyLastClass(container)
+      Chart.connectBlocks(opts.data, cnopts);
 
       Events.bindBlockClick(container, opts.blockClick)
       Events.bindItemClick(container, opts.itemClick)
     })
+
+    jQuery(".ganttview-slide-container").bind("scroll", jsPlumb.repaintEverything);
+    jQuery(document).bind("drag resize", jsPlumb.repaintEverything);
   }
 
   var Chart = {
@@ -168,6 +194,7 @@ var ChartLang = {
           var offset = DateUtils.daysBetween(start, series.start)
           var width = DateUtils.getWidth(series.start, series.days, cellWidth)
           var blockDiv = jQuery("<div>", {
+            "id": "ganttview-block-" + series.id,
             "class": "ganttview-block",
             "title": series.name + ", " + series.days + ChartLang.days,
             "css": {
@@ -203,6 +230,20 @@ var ChartLang = {
       jQuery("div.ganttview-grid-row div.ganttview-grid-row-cell:last-child", div).addClass("last")
       jQuery("div.ganttview-hzheader-days div.ganttview-hzheader-day:last-child", div).addClass("last")
       jQuery("div.ganttview-hzheader-months div.ganttview-hzheader-month:last-child", div).addClass("last")
+    },
+
+    connectBlocks: function (data, options) {
+      for (var i = 0; i < data.length; i++) {
+        var d = data[i]
+        if (!("depends" in d)) continue
+        for (var j = 0; j < d.depends.length; j++) {
+          var depend = d.depends[j]
+          jsPlumb.connect(jQuery.extend({
+            source: "ganttview-block-" + (i + 1),
+            target: "ganttview-block-" + depend
+          }, options))
+        }
+      }
     },
 
     addEvent: function(o, cellWidth, change) {
