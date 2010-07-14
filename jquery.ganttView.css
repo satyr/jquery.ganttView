@@ -109,6 +109,7 @@ div.ganttview-block {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  z-index: 6;
 }
 
 div.ganttview-block-text {
@@ -118,3 +119,5 @@ div.ganttview-block-text {
   color: #999;
   padding: 2px 3px;
 }
+
+._jsPlumb_connector {z-index: 3}
