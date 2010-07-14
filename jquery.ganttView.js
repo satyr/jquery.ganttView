@@ -93,7 +93,6 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
     })
 
     jQuery(".ganttview-slide-container").bind("scroll", jsPlumb.repaintEverything);
-    jQuery(document).bind("drag resize", jsPlumb.repaintEverything);
   }
 
   var Chart = {
