@@ -238,7 +238,7 @@ BrokenLineConnector.prototype.paint = function(dims, ctx){
         for (var j = 0; j < d.depends.length; j++) {
           var depend = d.depends[j]
           jsPlumb.connect(jQuery.extend({
-            source: "ganttview-block-" + (i + 1),
+            source: "ganttview-block-" + d.id,
             target: "ganttview-block-" + depend
           }, options))
         }
